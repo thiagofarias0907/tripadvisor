@@ -9,6 +9,15 @@ from parser import Parser
 from scraper import Scraper
 from studio import Studio
 
+import os
+import yaml
+from yaml import CLoader
+
+
+# Local Config File
+config = None
+with open(os.path.dirname(__file__) + '/config.yml', 'r', encoding='utf8') as file:
+    config = yaml.load(file, Loader=CLoader)
 
 description = """
 TripAdvisor.com simple web scraper that extracts from the filtered result page the "Attraction's" name, detailed url link, rating, number of reviews, category and location if exposed
@@ -46,7 +55,10 @@ def get_companies_by_country(country: Annotated[str, Path(title="Options: United
     return result
 
 
-
+# Opening Selenium controlled Browser - Using Undetected Chrome give better results than regular webdriver.Firefox()
+# If you are having problem with setting this driver, check their docs or replace this bya a regular Selenium browser
+# Caution: As in every web scraping project be aware of the risks of blocking your own IP.
+#          Use a vpn or add proxy controller and argument in the options bellow
 options = uc.ChromeOptions()
 options.add_argument(f"--window-size=1920,1080")
 options.add_argument(
@@ -68,10 +80,9 @@ options.add_argument("--disable-infobars")
 options.add_argument("--disable-gpu")
 options.add_argument("--disable-setuid-sandbox")
 options.add_argument("--disable-software-rasterizer")
+options.add_argument(f"--user-data-dir={config['chrome_profile_path']}")
 
-options.add_argument(f"--user-data-dir=E:\\effecti-projects\\python_projects\\chrome_profile")
-
-driver = uc.Chrome(executable_path='E:\\effecti-projects\\python_projects\\chromedriver.exe', options=options, version_main= 132)
+driver = uc.Chrome(executable_path=f'{config['chrome_path']}', options=options, version_main= 132)
 
 if __name__ == "__main__":
     uvicorn.run(api, host="localhost", port=8080)

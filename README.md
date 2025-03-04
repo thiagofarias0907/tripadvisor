@@ -9,7 +9,10 @@ TripAdvisor.com simple web scraper that extracts from the filtered result page t
  - Selenium
  - FastApi
  - unittest
+ - Undetected Chrome Driver <https://github.com/ultrafunkamsterdam/undetected-chromedriver/tree/master>
 
+## Config file
+You should fill the file `config-example.yml` with the chrome paths and rename it for `config.yml` 
 
 ## How to Run it
  - Create a venv
